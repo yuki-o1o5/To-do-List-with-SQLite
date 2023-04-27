@@ -7,7 +7,6 @@ import {
   fetchNewTodo,
   postNewTodo,
   removeNewTodo,
-  toggleUpdateTodo,
   updateTodo,
 } from "../utilities/api";
 
@@ -40,7 +39,7 @@ export function TodoList() {
 
     const newDataFromServer = await fetchNewTodo();
     dispatch({
-      type: actionTypes.CREATE_TASK,
+      type: actionTypes.HANDLE_REDUCER,
       payload: newDataFromServer,
     });
 
@@ -112,7 +111,7 @@ export function TodoList() {
 }
 
 function Todo({ eachTodo }) {
-  const { state, dispatch } = useContext(IndexContext);
+  const { dispatch } = useContext(IndexContext);
   // ----------------------------------------------------------------
   // Prevent line break when I click the enter key
   // ----------------------------------------------------------------
@@ -126,7 +125,7 @@ function Todo({ eachTodo }) {
     await removeNewTodo(id);
     const newDataFromServer = await fetchNewTodo();
     dispatch({
-      type: actionTypes.REMOVE_TASK,
+      type: actionTypes.HANDLE_REDUCER,
       payload: newDataFromServer,
     });
   };
@@ -139,7 +138,7 @@ function Todo({ eachTodo }) {
     await updateTodo(exitingTodo.id, editedTodo);
     const newDataFromServer = await fetchNewTodo();
     dispatch({
-      type: actionTypes.TOGGLE_TASK_ISCOMPLETED,
+      type: actionTypes.HANDLE_REDUCER,
       payload: newDataFromServer,
     });
   };
@@ -155,7 +154,7 @@ function Todo({ eachTodo }) {
       await updateTodo(exitingTodo.id, editedTodo);
       const newDataFromServer = await fetchNewTodo();
       dispatch({
-        type: actionTypes.EDIT_TASK,
+        type: actionTypes.HANDLE_REDUCER,
         payload: newDataFromServer,
       });
     }
@@ -173,13 +172,6 @@ function Todo({ eachTodo }) {
           contentEditable={true}
           suppressContentEditableWarning={true}
           onBlur={(event) => handleEditTodo(eachTodo, event.target.textContent)}
-          // dispatch({
-          //   type: actionTypes.EDIT_TASK,
-          //   payload: {
-          //     value: event.target.textContent,
-          //     id: eachTodo.id,
-          //   },
-          // })
           onKeyDown={preventDefault}
         >
           {eachTodo.name}
@@ -187,9 +179,6 @@ function Todo({ eachTodo }) {
       </div>
       <button
         className="removeButton"
-        // onClick={() =>
-        //   dispatch({ type: actionTypes.REMOVE_TASK, payload: eachTodo.id })
-        // }
         onClick={() => handleRemoveNewTodo(eachTodo.id)}
       >
         <HiOutlineXMark />
