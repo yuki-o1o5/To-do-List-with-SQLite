@@ -1,0 +1,71 @@
+.toDoControler {
+  display: grid;
+  grid-template-columns: 90% 10%;
+  border: 0.5px solid #d8d4d4;
+}
+
+.writtenTaskContainer {
+  display: grid;
+  grid-template-columns: 10% 90%;
+}
+
+.writtenTaskContainer input[type="checkbox"] {
+  margin: auto auto;
+  width: 2em;
+  height: 2em;
+  border: 0.05em solid;
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+  cursor: pointer;
+  accent-color: #cc9a9a;
+}
+
+.writtenTaskContainer label {
+  padding: 20px 0 20px 10px;
+  font-size: 20px;
+  color: rgb(55, 55, 55);
+}
+
+.removeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  font-size: 30px;
+  color: #cc9a9a;
+  border: none;
+  cursor: pointer;
+}
+
+.footerContainer {
+  height: 40px;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px;
+  border: 0.5px solid #d8d4d4;
+}
+
+.itemNumber {
+  padding-left: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  font-size: 16px;
+  padding: 5px 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: rgb(55, 55, 55);
+}
+
+.button.active {
+  border: 1px solid #c99599;
+  border-radius: 5px;
+}
