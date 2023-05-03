@@ -8,9 +8,17 @@ export function App() {
   const { dispatch } = useContext(IndexContext);
 
   useEffect(() => {
-    (async () => {
-      await fetchInitialNewTodos();
-    })();
+    // (async () => {
+    //   await fetchInitialNewTodos();
+    // })();
+
+    fetchInitialNewTodos()
+      .then(() => {
+        // do nothing
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   const fetchInitialNewTodos = async () => {

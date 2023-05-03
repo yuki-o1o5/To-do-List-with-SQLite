@@ -12,6 +12,9 @@ import {
 
 export function TodoList() {
   const { state, dispatch } = useContext(IndexContext);
+
+// const { createTodo } = useTodo();
+
   // ----------------------------------------------------------------
   // Change todos by the status
   // todos.isCompleted = false => "active"
@@ -34,6 +37,8 @@ export function TodoList() {
       name: event.target.value,
       isCompleted: false,
     };
+
+    // await createTodo(newTodo);
 
     await postNewTodo(newTodo);
 
