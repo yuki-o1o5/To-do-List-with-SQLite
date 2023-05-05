@@ -1,6 +1,6 @@
 import { TodoList } from "./components/TodoList";
 import "./App.css";
-import { useFetchNewTodos } from "./hooks/AppHooks";
+import { useFetchNewTodos } from "./hooks/hooks";
 
 export function App() {
   const { todos, isError, error, isLoading } = useFetchNewTodos();
