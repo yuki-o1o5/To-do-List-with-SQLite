@@ -3,17 +3,10 @@ import React, { useContext, useMemo } from "react";
 import "./TodoList.css";
 import { actionTypes } from "../index";
 import { IndexContext } from "..";
-import {
-  fetchNewTodo,
-  postNewTodo,
-  removeNewTodo,
-  updateTodo,
-} from "../utilities/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCreateNewTodo, useMutationPost } from "../hooks/AppHooks";
+import { postNewTodo, removeNewTodo, updateTodo } from "../api/api";
+import { useCreateNewTodo, useEditTodo, useRemoveTodo } from "../hooks/hooks";
 
 export function TodoList({ todos }) {
-  const queryClient = useQueryClient();
   const { state, dispatch } = useContext(IndexContext);
   // ----------------------------------------------------------------
   // Change todos by the status
@@ -32,7 +25,6 @@ export function TodoList({ todos }) {
     });
   }, [state.status, todos]);
 
-  // const createNewTodoMutation = useMutation(postNewTodo);
   const { createNewTodo } = useCreateNewTodo(postNewTodo);
   const handleCreateNewTodo = async (event) => {
     const newTodo = {
@@ -41,8 +33,6 @@ export function TodoList({ todos }) {
     };
 
     await createNewTodo(newTodo);
-    // await createNewTodoMutation.mutateAsync(newTodo);
-    // await queryClient.refetchQueries();
     event.target.value = "";
   };
 
@@ -106,7 +96,6 @@ export function TodoList({ todos }) {
 }
 
 function Todo({ eachTodo }) {
-  const queryClient = useQueryClient();
   // ----------------------------------------------------------------
   // Prevent line break when I click the enter key
   // ----------------------------------------------------------------
@@ -116,47 +105,35 @@ function Todo({ eachTodo }) {
     }
   };
 
-  // const handleRemoveNewTodo = async (id) => {
-  //   await removeNewTodo(id);
-  //   await fetchNewTodo();
-  //   // dispatch({
-  //   //   type: actionTypes.HANDLE_REDUCER,
-  //   //   payload: newDataFromServer,
-  //   // });
-  // };
-
-  const removeTodoMutation = useMutation(removeNewTodo);
+  const { removeTodo } = useRemoveTodo(removeNewTodo);
   const handleRemoveNewTodo = async (id) => {
-    await removeTodoMutation.mutateAsync(id);
-    await queryClient.refetchQueries();
+    await removeTodo(id);
   };
 
-  const toggleTodoMutation = useMutation(updateTodo);
+  const { editTodo } = useEditTodo(updateTodo);
   const handleToggleTodo = async (exitingTodo) => {
     const editedTodo = {
       name: exitingTodo.name,
       isCompleted: !exitingTodo.isCompleted,
     };
-    await toggleTodoMutation.mutateAsync({
+    await editTodo({
       id: exitingTodo.id,
       todo: editedTodo,
     });
-    await queryClient.refetchQueries();
   };
 
   const handleEditTodo = async (exitingTodo, value) => {
     if (value.length === 0) {
-      await removeTodoMutation.mutateAsync(exitingTodo.id);
+      await removeTodo(exitingTodo.id);
     } else {
       const editedTodo = {
         name: value,
         isCompleted: exitingTodo.isCompleted,
       };
-      await toggleTodoMutation.mutateAsync({
+      await editTodo({
         id: exitingTodo.id,
         todo: editedTodo,
       });
-      await queryClient.refetchQueries();
     }
   };
 
