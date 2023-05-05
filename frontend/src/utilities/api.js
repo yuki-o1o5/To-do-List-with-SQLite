@@ -7,6 +7,7 @@ export const fetchNewTodo = async () => {
   }
 };
 
+
 export const postNewTodo = async (newTodo) => {
   try {
     await fetch("http://localhost:3001/todos", {
@@ -19,6 +20,7 @@ export const postNewTodo = async (newTodo) => {
   }
 };
 
+
 export const removeNewTodo = async (id) => {
   try {
     await fetch(`http://localhost:3001/todos/${id}`, { method: "DELETE" });
@@ -27,11 +29,12 @@ export const removeNewTodo = async (id) => {
   }
 };
 
-export const updateTodo = async (id, editedTodo) => {
+export const updateTodo = async ({ id, todo }) => {
   try {
+    console.log(todo, "edi");
     await fetch(`http://localhost:3001/todos/${id}`, {
       method: "PUT",
-      body: JSON.stringify(editedTodo),
+      body: JSON.stringify(todo),
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {

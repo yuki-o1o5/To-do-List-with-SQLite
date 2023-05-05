@@ -9,19 +9,19 @@ import {
   removeNewTodo,
   updateTodo,
 } from "../utilities/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCreateNewTodo, useMutationPost } from "../hooks/AppHooks";
 
-export function TodoList() {
+export function TodoList({ todos }) {
+  const queryClient = useQueryClient();
   const { state, dispatch } = useContext(IndexContext);
-
-// const { createTodo } = useTodo();
-
   // ----------------------------------------------------------------
   // Change todos by the status
   // todos.isCompleted = false => "active"
   // todos.isCompleted = true  => "completed"
   // ----------------------------------------------------------------
   const filteredTodos = useMemo(() => {
-    return state.todos.filter((todo) => {
+    return todos.filter((todo) => {
       if (state.status === "active") {
         return !todo.isCompleted;
       } else if (state.status === "completed") {
@@ -30,24 +30,19 @@ export function TodoList() {
         return true;
       }
     });
-  }, [state.status, state.todos]);
+  }, [state.status, todos]);
 
+  // const createNewTodoMutation = useMutation(postNewTodo);
+  const { createNewTodo } = useCreateNewTodo(postNewTodo);
   const handleCreateNewTodo = async (event) => {
     const newTodo = {
       name: event.target.value,
       isCompleted: false,
     };
 
-    // await createTodo(newTodo);
-
-    await postNewTodo(newTodo);
-
-    const newDataFromServer = await fetchNewTodo();
-    dispatch({
-      type: actionTypes.HANDLE_REDUCER,
-      payload: newDataFromServer,
-    });
-
+    await createNewTodo(newTodo);
+    // await createNewTodoMutation.mutateAsync(newTodo);
+    // await queryClient.refetchQueries();
     event.target.value = "";
   };
 
@@ -64,20 +59,15 @@ export function TodoList() {
         }}
         autoFocus
       />
-
       {filteredTodos.map((eachTodo, index) => {
         return <Todo eachTodo={eachTodo} key={index} />;
       })}
 
       <div className="footerContainer">
         <div className="itemNumber">
-          {state.todos.filter((todo) => !todo.isCompleted).length < 2
-            ? `${
-                state.todos.filter((todo) => !todo.isCompleted).length
-              } task left`
-            : `${
-                state.todos.filter((todo) => !todo.isCompleted).length
-              } tasks left `}
+          {todos.filter((todo) => !todo.isCompleted).length < 2
+            ? `${todos.filter((todo) => !todo.isCompleted).length} task left`
+            : `${todos.filter((todo) => !todo.isCompleted).length} tasks left `}
         </div>
         <div className="buttonContainer">
           <button
@@ -116,7 +106,7 @@ export function TodoList() {
 }
 
 function Todo({ eachTodo }) {
-  const { dispatch } = useContext(IndexContext);
+  const queryClient = useQueryClient();
   // ----------------------------------------------------------------
   // Prevent line break when I click the enter key
   // ----------------------------------------------------------------
@@ -126,42 +116,47 @@ function Todo({ eachTodo }) {
     }
   };
 
+  // const handleRemoveNewTodo = async (id) => {
+  //   await removeNewTodo(id);
+  //   await fetchNewTodo();
+  //   // dispatch({
+  //   //   type: actionTypes.HANDLE_REDUCER,
+  //   //   payload: newDataFromServer,
+  //   // });
+  // };
+
+  const removeTodoMutation = useMutation(removeNewTodo);
   const handleRemoveNewTodo = async (id) => {
-    await removeNewTodo(id);
-    const newDataFromServer = await fetchNewTodo();
-    dispatch({
-      type: actionTypes.HANDLE_REDUCER,
-      payload: newDataFromServer,
-    });
+    await removeTodoMutation.mutateAsync(id);
+    await queryClient.refetchQueries();
   };
 
+  const toggleTodoMutation = useMutation(updateTodo);
   const handleToggleTodo = async (exitingTodo) => {
     const editedTodo = {
       name: exitingTodo.name,
       isCompleted: !exitingTodo.isCompleted,
     };
-    await updateTodo(exitingTodo.id, editedTodo);
-    const newDataFromServer = await fetchNewTodo();
-    dispatch({
-      type: actionTypes.HANDLE_REDUCER,
-      payload: newDataFromServer,
+    await toggleTodoMutation.mutateAsync({
+      id: exitingTodo.id,
+      todo: editedTodo,
     });
+    await queryClient.refetchQueries();
   };
 
   const handleEditTodo = async (exitingTodo, value) => {
     if (value.length === 0) {
-      await handleRemoveNewTodo(exitingTodo.id);
+      await removeTodoMutation.mutateAsync(exitingTodo.id);
     } else {
       const editedTodo = {
         name: value,
         isCompleted: exitingTodo.isCompleted,
       };
-      await updateTodo(exitingTodo.id, editedTodo);
-      const newDataFromServer = await fetchNewTodo();
-      dispatch({
-        type: actionTypes.HANDLE_REDUCER,
-        payload: newDataFromServer,
+      await toggleTodoMutation.mutateAsync({
+        id: exitingTodo.id,
+        todo: editedTodo,
       });
+      await queryClient.refetchQueries();
     }
   };
 
