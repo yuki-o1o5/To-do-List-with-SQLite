@@ -2,7 +2,7 @@ import { TodoList } from "./components/TodoList";
 import "./App.css";
 import { useFetchNewTodos } from "./hooks/hooks";
 
-export function App() {
+export default function App() {
   const { todos, isError, error, isLoading } = useFetchNewTodos();
 
   if (isLoading) {
