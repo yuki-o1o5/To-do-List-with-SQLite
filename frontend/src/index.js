@@ -2,23 +2,24 @@ import React, { createContext, useReducer } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { App } from "./App";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const IndexContext = createContext({});
 
 export const actionTypes = {
-  HANDLE_REDUCER: "HANDLE_REDUCER",
+  // HANDLE_REDUCER: "HANDLE_REDUCER",
   CHANGE_FILTER: "CHANGE_FILTER",
 };
 
 const initialState = {
-  todos: [],
+  // todos: [],
   status: "all",
 };
 
 const appStateReducer = (state, action) => {
   switch (action.type) {
-    case actionTypes.HANDLE_REDUCER:
-      return { ...state, todos: action.payload };
+    // case actionTypes.HANDLE_REDUCER:
+    //   return { ...state, todos: action.payload };
     case actionTypes.CHANGE_FILTER:
       // all, active, completed
       return { ...state, status: action.payload };
@@ -38,11 +39,15 @@ const IndexContextProvider = ({ children }) => {
   );
 };
 
+const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-  <IndexContextProvider>
-    <App />
-  </IndexContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <IndexContextProvider>
+        <App />
+      </IndexContextProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

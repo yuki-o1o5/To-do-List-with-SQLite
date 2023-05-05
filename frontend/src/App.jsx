@@ -1,44 +1,24 @@
-/* eslint-disable array-callback-return */
-import { useContext, useEffect } from "react";
 import { TodoList } from "./components/TodoList";
 import "./App.css";
-import { IndexContext, actionTypes } from ".";
+import { useFetchNewTodos } from "./hooks/AppHooks";
 
 export function App() {
-  const { dispatch } = useContext(IndexContext);
+  const { todos, isError, error, isLoading } = useFetchNewTodos();
 
-  useEffect(() => {
-    // (async () => {
-    //   await fetchInitialNewTodos();
-    // })();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    fetchInitialNewTodos()
-      .then(() => {
-        // do nothing
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
-
-  const fetchInitialNewTodos = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/todos");
-      const data = await res.json();
-      dispatch({
-        type: actionTypes.HANDLE_REDUCER,
-        payload: data,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  if (isError) {
+    console.log(error);
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="App">
       <h1>todos</h1>
       <div className="toDoContainer">
-        <TodoList />
+        <TodoList todos={todos} />
       </div>
     </div>
   );
