@@ -1,13 +1,11 @@
 import { HiOutlineXMark } from "react-icons/hi2";
-import React, { useContext, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import "./TodoList.css";
-import { actionTypes } from "../index";
-import { IndexContext } from "..";
 import { postNewTodo, removeNewTodo, updateTodo } from "../api/api";
 import { useCreateNewTodo, useEditTodo, useRemoveTodo } from "../hooks/hooks";
 
 export function TodoList({ todos }) {
-  const { state, dispatch } = useContext(IndexContext);
+  const [status, setStatus] = useState("all");
   // ----------------------------------------------------------------
   // Change todos by the status
   // todos.isCompleted = false => "active"
@@ -15,15 +13,15 @@ export function TodoList({ todos }) {
   // ----------------------------------------------------------------
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
-      if (state.status === "active") {
+      if (status === "active") {
         return !todo.isCompleted;
-      } else if (state.status === "completed") {
+      } else if (status === "completed") {
         return todo.isCompleted;
       } else {
         return true;
       }
     });
-  }, [state.status, todos]);
+  }, [status, todos]);
 
   const { createNewTodo } = useCreateNewTodo(postNewTodo);
   const handleCreateNewTodo = async (event) => {
@@ -61,31 +59,20 @@ export function TodoList({ todos }) {
         </div>
         <div className="buttonContainer">
           <button
-            className={state.status === "all" ? "button active" : "button"}
-            onClick={() =>
-              dispatch({ type: actionTypes.CHANGE_FILTER, payload: "all" })
-            }
+            className={status === "all" ? "button active" : "button"}
+            onClick={() => setStatus("all")}
           >
             All
           </button>
           <button
-            className={state.status === "active" ? "button active" : "button"}
-            onClick={() =>
-              dispatch({ type: actionTypes.CHANGE_FILTER, payload: "active" })
-            }
+            className={status === "active" ? "button active" : "button"}
+            onClick={() => setStatus("active")}
           >
             Actives
           </button>
           <button
-            className={
-              state.status === "completed" ? "button active" : "button"
-            }
-            onClick={() =>
-              dispatch({
-                type: actionTypes.CHANGE_FILTER,
-                payload: "completed",
-              })
-            }
+            className={status === "completed" ? "button active" : "button"}
+            onClick={() => setStatus("completed")}
           >
             Completed
           </button>
