@@ -6,7 +6,7 @@ export function App() {
   const { todos, isError, error, isLoading } = useFetchNewTodos();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div style={{ textAlign: "center" }}>Loading...</div>;
   }
 
   if (isError) {

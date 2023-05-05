@@ -7,23 +7,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 export const IndexContext = createContext({});
 
 export const actionTypes = {
-  // HANDLE_REDUCER: "HANDLE_REDUCER",
   CHANGE_FILTER: "CHANGE_FILTER",
 };
 
 const initialState = {
-  // todos: [],
   status: "all",
 };
 
 const appStateReducer = (state, action) => {
   switch (action.type) {
-    // case actionTypes.HANDLE_REDUCER:
-    //   return { ...state, todos: action.payload };
     case actionTypes.CHANGE_FILTER:
-      // all, active, completed
       return { ...state, status: action.payload };
-
     default:
       return state;
   }
@@ -31,7 +25,6 @@ const appStateReducer = (state, action) => {
 
 const IndexContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appStateReducer, initialState);
-
   return (
     <IndexContext.Provider value={{ state, dispatch }}>
       {children}

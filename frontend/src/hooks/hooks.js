@@ -17,7 +17,6 @@ export const useCreateNewTodo = (postNewTodo) => {
 
   const createNewTodoMutation = useMutation(postNewTodo, {
     onSuccess: () => {
-      // Refetch queries after a successful mutation
       queryClient.refetchQueries();
     },
   });
@@ -26,7 +25,6 @@ export const useCreateNewTodo = (postNewTodo) => {
     try {
       await createNewTodoMutation.mutateAsync(newTodo);
     } catch (error) {
-      // Handle any errors that occur during the mutation
       console.error("Error creating new todo:", error);
     }
   };
@@ -39,7 +37,6 @@ export const useRemoveTodo = (removeNewTodo) => {
 
   const removeTodoMutation = useMutation(removeNewTodo, {
     onSuccess: () => {
-      // Refetch queries after a successful mutation
       queryClient.refetchQueries();
     },
   });
@@ -48,7 +45,6 @@ export const useRemoveTodo = (removeNewTodo) => {
     try {
       await removeTodoMutation.mutateAsync(id);
     } catch (error) {
-      // Handle any errors that occur during the mutation
       console.error("Error removing todo:", error);
     }
   };
@@ -61,7 +57,6 @@ export const useEditTodo = (updateTodo) => {
 
   const editTodoMutation = useMutation(updateTodo, {
     onSuccess: () => {
-      // Refetch queries after a successful mutation
       queryClient.refetchQueries();
     },
   });
@@ -70,23 +65,9 @@ export const useEditTodo = (updateTodo) => {
     try {
       await editTodoMutation.mutateAsync(editedTodoObject);
     } catch (error) {
-      // Handle any errors that occur during the mutation
       console.error("Error toggling todo:", error);
     }
   };
 
   return { editTodo };
 };
-
-// const toggleTodoMutation = useMutation(updateTodo);
-// const handleToggleTodo = async (exitingTodo) => {
-//   const editedTodo = {
-//     name: exitingTodo.name,
-//     isCompleted: !exitingTodo.isCompleted,
-//   };
-//   await toggleTodoMutation.mutateAsync({
-//     id: exitingTodo.id,
-//     todo: editedTodo,
-//   });
-//   await queryClient.refetchQueries();
-// };
