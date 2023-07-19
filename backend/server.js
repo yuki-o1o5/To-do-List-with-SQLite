@@ -43,7 +43,7 @@ app.get("/todos", (req, res) => {
 
 app.post("/todos", (req, res) => {
   const { name, isCompleted } = req.body;
-  // ?は後で置き換えるために
+
   const sql = "INSERT INTO todos (name, isCompleted) VALUES (?, ?)";
   db.run(sql, [name, isCompleted], function (err) {
     if (err) {
