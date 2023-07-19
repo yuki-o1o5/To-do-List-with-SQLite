@@ -1,16 +1,15 @@
 export const fetchNewTodo = async () => {
   try {
-    const res = await fetch("http://localhost:3001/todos");
+    const res = await fetch(`${process.env.REACT_APP_PORT}/todos`);
     return res.json();
   } catch (err) {
     console.log(err);
   }
 };
 
-
 export const postNewTodo = async (newTodo) => {
   try {
-    await fetch("http://localhost:3001/todos", {
+    await fetch(`${process.env.REACT_APP_PORT}/todos`, {
       method: "POST",
       body: JSON.stringify(newTodo),
       headers: { "Content-Type": "application/json" },
@@ -20,10 +19,11 @@ export const postNewTodo = async (newTodo) => {
   }
 };
 
-
 export const removeNewTodo = async (id) => {
   try {
-    await fetch(`http://localhost:3001/todos/${id}`, { method: "DELETE" });
+    await fetch(`${process.env.REACT_APP_PORT}/todos/${id}`, {
+      method: "DELETE",
+    });
   } catch (err) {
     console.log(err);
   }
@@ -32,7 +32,7 @@ export const removeNewTodo = async (id) => {
 export const updateTodo = async ({ id, todo }) => {
   try {
     console.log(todo, "edi");
-    await fetch(`http://localhost:3001/todos/${id}`, {
+    await fetch(`${process.env.REACT_APP_PORT}/todos/${id}`, {
       method: "PUT",
       body: JSON.stringify(todo),
       headers: { "Content-Type": "application/json" },
