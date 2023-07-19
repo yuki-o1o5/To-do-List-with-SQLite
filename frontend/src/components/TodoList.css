@@ -69,3 +69,24 @@
   border: 1px solid #c99599;
   border-radius: 5px;
 }
+
+@media screen and (max-width: 768px) {
+  .itemNumber {
+    font-size: 12px;
+  }
+  .button {
+    font-size: 12px;
+  }
+  .writtenTaskContainer input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .writtenTaskContainer label {
+    font-size: 12px;
+  }
+
+  .removeButton {
+    font-size: 16px;
+  }
+}

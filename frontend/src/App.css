@@ -24,3 +24,18 @@ h1 {
   padding: 16px 16px 16px 55px;
   border: 0.5px solid #d8d4d4;
 }
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  .toDoContainer {
+    width: 80%;
+  }
+
+  .newInput {
+    padding: 16px 16px 16px 30px;
+    font-size: 12px;
+  }
+}
